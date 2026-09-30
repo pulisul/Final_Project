@@ -1,0 +1,20 @@
+{"case_id": "q01", "question": "RAG는 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "reference_answer": "RAG는 질문과 관련된 문서를 검색한 뒤 검색 근거를 생성 단계에 제공하는 구조입니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q02", "question": "RAG에서 먼저 수행하는 작업은 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "reference_answer": "질문과 관련된 문서를 먼저 검색합니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q03", "question": "검색된 근거는 어디에 제공되나요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "reference_answer": "검색된 근거는 생성 단계에 제공됩니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q04", "question": "이 프로젝트의 핵심 게이트가 요구하는 것은 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "reference_answer": "검색 결과와 출처가 연결되어야 합니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q05", "question": "검색 결과와 출처의 관계는 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "reference_answer": "검색 결과와 출처가 연결되어야 합니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q06", "question": "사과는 무엇인가요?", "relevant_doc_ids": ["c580497da026f365"], "reference_answer": "사과는 과일입니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q07", "question": "사과에는 여러 품종이 있나요?", "relevant_doc_ids": ["c580497da026f365"], "reference_answer": "사과에는 여러 품종이 있습니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q08", "question": "사과 샘플 문서는 무엇을 검증하나요?", "relevant_doc_ids": ["c580497da026f365"], "reference_answer": "RAG 검색과 출처 검증의 재현성 테스트에 사용됩니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q09", "question": "샘플 문서에서 과일로 언급된 것은 무엇인가요?", "relevant_doc_ids": ["c580497da026f365"], "reference_answer": "사과입니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q10", "question": "RAG 문서와 사과 문서는 어떤 테스트에 쓰이나요?", "relevant_doc_ids": ["dc7d4cb4e08c8325", "c580497da026f365"], "reference_answer": "RAG 구조와 검색·출처 검증의 재현성을 시험하는 샘플입니다.", "should_fallback": false, "question_type": "multi_doc"}
+{"case_id": "q11", "question": "두 샘플 문서가 공통으로 지원하는 프로젝트 목적은 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325", "c580497da026f365"], "reference_answer": "RAG 검색과 출처 연결을 재현 가능하게 검증하는 목적입니다.", "should_fallback": false, "question_type": "multi_doc"}
+{"case_id": "q12", "question": "문서 검색과 생성은 어떤 순서로 연결되나요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "reference_answer": "문서를 먼저 검색하고 검색 근거를 생성 단계에 제공합니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q13", "question": "출처 검증 재현성 테스트용 문서는 무엇인가요?", "relevant_doc_ids": ["c580497da026f365"], "reference_answer": "사과 샘플 문서입니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q14", "question": "RAG에서 생성 단계가 받는 입력 중 문서와 관련된 것은 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "reference_answer": "검색된 근거입니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q15", "question": "검색 결과와 출처가 연결되지 않으면 핵심 게이트를 통과하나요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "reference_answer": "통과하지 않습니다.", "should_fallback": false, "question_type": "fact"}
+{"case_id": "q16", "question": "화성 기지 건설 예산은 얼마인가요?", "relevant_doc_ids": [], "reference_answer": "문서에 근거가 없습니다.", "should_fallback": true, "question_type": "fallback"}
+{"case_id": "q17", "question": "2028년 서울의 정확한 인구는 얼마인가요?", "relevant_doc_ids": [], "reference_answer": "문서에 근거가 없습니다.", "should_fallback": true, "question_type": "fallback"}
+{"case_id": "q18", "question": "양자컴퓨터의 최신 시장 점유율은 얼마인가요?", "relevant_doc_ids": [], "reference_answer": "문서에 근거가 없습니다.", "should_fallback": true, "question_type": "fallback"}
+{"case_id": "q19", "question": "특정 회사의 최신 매출을 알려주세요.", "relevant_doc_ids": [], "reference_answer": "문서에 근거가 없습니다.", "should_fallback": true, "question_type": "fallback"}
+{"case_id": "q20", "question": "이 문서에 없는 해외 주식의 내일 종가는 얼마인가요?", "relevant_doc_ids": [], "reference_answer": "문서에 근거가 없습니다.", "should_fallback": true, "question_type": "fallback"}

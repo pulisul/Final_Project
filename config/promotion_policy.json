@@ -1,0 +1,14 @@
+{
+  "default": {
+    "min_delta": {},
+    "max_regression": {"hit_rate_at_k": 0.02, "citation_success": 0.0, "fallback_accuracy": 0.02}
+  },
+  "grounding_verifier": {
+    "min_delta": {"citation_success": 0.0},
+    "max_regression": {"hit_rate_at_k": 0.02, "fallback_accuracy": 0.02}
+  },
+  "rl_policy": {
+    "min_delta": {"reward_mean": 0.01},
+    "max_regression": {"hit_rate_at_k": 0.02, "citation_success": 0.0}
+  }
+}

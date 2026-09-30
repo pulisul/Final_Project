@@ -1,0 +1,52 @@
+{
+  "mode": "smoke",
+  "overall_pass": true,
+  "checks": {
+    "final_regression": {
+      "pass": true,
+      "returncode": 0,
+      "stdout": "{\n  \"pass\": true,\n  \"stdout\": \"........................................................................ [ 97%]\\n..                                                                       [100%]\\n\",\n  \"stderr\": \"\"\n}\n",
+      "stderr": ""
+    },
+    "submission_manifest": {
+      "pass": true,
+      "returncode": 0,
+      "stdout": "{\n  \"pass\": true,\n  \"required\": [\n    \"README.md\",\n    \"ARCHITECTURE.md\",\n    \"requirements.txt\",\n    \"requirements-dev.txt\",\n    \"pyproject.toml\",\n    \"docs/final/ARCHITECTURE_FINAL.md\",\n    \"docs/final/ERD_FINAL.md\",\n    \"docs/final/RL_FLOW_FINAL.md\",\n    \"docs/final/EVALUATION_REPORT.md\",\n    \"docs/final/DATA_ANALYSIS_REPORT.md\",\n    \"docs/final/DEMO_SCRIPT.md\",\n    \"docs/final/SUBMISSION_CHECKLIST.md\",\n    \"evidence/week8/WEEK8_GATE.json\",\n    \"evidence/week7/WEEK7_GATE.json\"\n  ],\n  \"missing\": []\n}\n",
+      "stderr": ""
+    },
+    "release_manifest": {
+      "pass": true,
+      "returncode": 0,
+      "stdout": "{\n  \"manifest\": \"/mnt/data/ia_fix_work/IntellectAgent_Weekly_Build_v3/evidence/week9/RELEASE_MANIFEST.json\",\n  \"file_count\": 360,\n  \"verify\": {\n    \"pass\": true,\n    \"changed\": [],\n    \"missing\": [],\n    \"checked\": 360\n  }\n}\n",
+      "stderr": ""
+    },
+    "week2_gate": {
+      "pass": true,
+      "path": "evidence/week2/WEEK2_GATE.json"
+    },
+    "week3_gate": {
+      "pass": true,
+      "path": "evidence/week3/WEEK3_GATE.json"
+    },
+    "week4_gate": {
+      "pass": true,
+      "path": "evidence/week4/WEEK4_GATE.json"
+    },
+    "week5_gate": {
+      "pass": true,
+      "path": "evidence/week5/WEEK5_GATE.json"
+    },
+    "week6_gate": {
+      "pass": true,
+      "path": "evidence/week6/WEEK6_GATE.json"
+    },
+    "week7_gate": {
+      "pass": true,
+      "path": "evidence/week7/WEEK7_GATE.json"
+    },
+    "week8_gate": {
+      "pass": true,
+      "path": "evidence/week8/WEEK8_GATE.json"
+    }
+  }
+}

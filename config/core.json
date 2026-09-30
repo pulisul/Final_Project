@@ -1,0 +1,41 @@
+{
+  "allowed_root": "data/sample_docs",
+  "index_dir": "index/chroma",
+  "metadata_db": "index/metadata.sqlite3",
+  "evidence_dir": "evidence",
+  "collection_name": "intellectagent",
+  "max_file_bytes": 10485760,
+  "allowed_extensions": [
+    ".md",
+    ".txt",
+    ".pdf"
+  ],
+  "semantic_min_chars": 120,
+  "semantic_max_chars": 1200,
+  "fallback_chunk_chars": 700,
+  "fallback_overlap_chars": 80,
+  "top_k": 5,
+  "fallback_min_score": 0.12,
+  "embedding_model": "BAAI/bge-m3",
+  "reranker_model": "BAAI/bge-reranker-v2-m3",
+  "ollama_model": "qwen2.5:14b",
+  "feature_flags": {
+    "use_chroma": false,
+    "use_sentence_transformer": false,
+    "use_reranker": false,
+    "use_ollama": false,
+    "use_langgraph": false,
+    "use_ragas": false,
+    "use_rl": false,
+    "use_grounding_verifier": false,
+    "use_session_preferences": false,
+    "use_long_term_memory": false,
+    "use_ocr": false,
+    "use_web_search": false,
+    "web_allowed_hosts": [],
+    "use_finetune": false,
+    "use_multi_tool_agent": false
+  },
+  "candidate_k": 10,
+  "runtime_profile": "auto"
+}

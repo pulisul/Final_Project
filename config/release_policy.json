@@ -1,0 +1,31 @@
+{
+  "python_major_minor": "3.11",
+  "min_index_success_ratio": 0.95,
+  "smoke": {
+    "min_hit_rate_at_k": 0.66,
+    "min_fallback_accuracy": 1.0,
+    "min_citation_success": 1.0
+  },
+  "strict": {
+    "min_hit_rate_at_k": 0.8,
+    "min_fallback_accuracy": 0.9,
+    "min_citation_success": 1.0,
+    "require_lock_file": true,
+    "require_pip_check": true,
+    "min_mrr": 0.6
+  },
+  "production": {
+    "min_hit_rate_at_k": 0.8,
+    "min_mrr": 0.65,
+    "min_fallback_accuracy": 0.9,
+    "min_citation_success": 1.0,
+    "candidate_min_hit_rate_at_k": 0.8,
+    "candidate_min_mrr": 0.6,
+    "max_latency_ms_p95_by_profile": {
+      "mac-native": 180000,
+      "linux-cuda": 60000,
+      "cpu": 300000,
+      "auto": 300000
+    }
+  }
+}

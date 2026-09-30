@@ -1,0 +1,54 @@
+# Python caches / build outputs
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+.venv-*/
+venv/
+env/
+
+# OS / editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets / local environment
+.env
+.env.*
+!.env.example
+
+# Runtime databases and indexes
+index/*
+!index/.gitkeep
+*.sqlite3
+*.sqlite
+
+# Runtime evidence and generated artifacts
+evidence/*
+!evidence/.gitkeep
+artifacts/*
+!artifacts/week7/
+artifacts/week7/*
+!artifacts/week7/active_policy.json
+
+# User/private RAG documents
+data/real_docs/*
+!data/real_docs/.gitkeep
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+/tmp/
+
+# Local model/cache directories
+.cache/
+.huggingface/

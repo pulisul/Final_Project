@@ -1,0 +1,22 @@
+# Python 3.11.x
+# Install torch separately for your OS/CPU/CUDA first.
+pypdf>=6.0,<7.0
+langchain-text-splitters>=1.0,<2.0
+sentence-transformers>=5.0,<6.0
+chromadb>=1.0,<2.0
+langchain>=1.0,<2.0
+langgraph>=1.0,<2.0
+langchain-ollama>=1.0,<2.0
+ollama>=0.6,<1.0
+ragas>=0.4,<0.5
+openai>=1.0,<3.0  # RAGAS local Ollama uses OpenAI-compatible localhost client
+datasets>=4.0,<5.0
+numpy>=2.0,<3.0
+scikit-learn>=1.7,<2.0
+pandas>=2.3,<3.0
+plotly>=6.0,<7.0
+streamlit>=1.50,<2.0
+python-dotenv>=1.1,<2.0
+
+# Web fallback when the RAG corpus is empty.
+ddgs>=9.16,<10.0

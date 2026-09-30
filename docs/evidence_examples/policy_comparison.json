@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "policies": {
+    "linucb": {
+      "seed_count": 5,
+      "reward_mean": 0.941825473473784,
+      "reward_std_across_seeds": 0.032569966567542505,
+      "seeds": [
+        2026100301,
+        2026100302,
+        2026100303,
+        2026100304,
+        2026100305
+      ],
+      "runs": [
+        {
+          "policy": "linucb",
+          "seed": 2026100301,
+          "steps": 500,
+          "reward_mean": 0.9215151891612814,
+          "reward_std": 0.2086088864269353,
+          "action_counts": {
+            "A0_basic_top5": 1,
+            "A1_wide_rerank": 468,
+            "A2_rewrite_rerank": 31
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "linucb",
+          "seed": 2026100302,
+          "steps": 500,
+          "reward_mean": 0.9446358324440863,
+          "reward_std": 0.23940999441015384,
+          "action_counts": {
+            "A0_basic_top5": 110,
+            "A1_wide_rerank": 370,
+            "A2_rewrite_rerank": 20
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "linucb",
+          "seed": 2026100303,
+          "steps": 500,
+          "reward_mean": 1.0029461617163655,
+          "reward_std": 0.23067330075624562,
+          "action_counts": {
+            "A0_basic_top5": 118,
+            "A1_wide_rerank": 275,
+            "A2_rewrite_rerank": 107
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "linucb",
+          "seed": 2026100304,
+          "steps": 500,
+          "reward_mean": 0.9299267981180307,
+          "reward_std": 0.23831639164777957,
+          "action_counts": {
+            "A0_basic_top5": 121,
+            "A1_wide_rerank": 372,
+            "A2_rewrite_rerank": 7
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "linucb",
+          "seed": 2026100305,
+          "steps": 500,
+          "reward_mean": 0.9101033859291554,
+          "reward_std": 0.21381905669148668,
+          "action_counts": {
+            "A0_basic_top5": 1,
+            "A1_wide_rerank": 499,
+            "A2_rewrite_rerank": 0
+          },
+          "completed_steps": 500,
+          "resumed": false
+        }
+      ]
+    },
+    "random": {
+      "seed_count": 5,
+      "reward_mean": 0.8254441896122259,
+      "reward_std_across_seeds": 0.013731135218878438,
+      "seeds": [
+        2026100301,
+        2026100302,
+        2026100303,
+        2026100304,
+        2026100305
+      ],
+      "runs": [
+        {
+          "policy": "random",
+          "seed": 2026100301,
+          "steps": 500,
+          "reward_mean": 0.8487798179864352,
+          "reward_std": 0.324871877861151,
+          "action_counts": {
+            "A0_basic_top5": 173,
+            "A1_wide_rerank": 159,
+            "A2_rewrite_rerank": 168
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "random",
+          "seed": 2026100302,
+          "steps": 500,
+          "reward_mean": 0.8201610688336318,
+          "reward_std": 0.3317254011950366,
+          "action_counts": {
+            "A0_basic_top5": 168,
+            "A1_wide_rerank": 171,
+            "A2_rewrite_rerank": 161
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "random",
+          "seed": 2026100303,
+          "steps": 500,
+          "reward_mean": 0.8091436424000074,
+          "reward_std": 0.3341463516074702,
+          "action_counts": {
+            "A0_basic_top5": 168,
+            "A1_wide_rerank": 168,
+            "A2_rewrite_rerank": 164
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "random",
+          "seed": 2026100304,
+          "steps": 500,
+          "reward_mean": 0.8317450796717213,
+          "reward_std": 0.3298204248204288,
+          "action_counts": {
+            "A0_basic_top5": 161,
+            "A1_wide_rerank": 166,
+            "A2_rewrite_rerank": 173
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "random",
+          "seed": 2026100305,
+          "steps": 500,
+          "reward_mean": 0.8173913391693336,
+          "reward_std": 0.32965457098318884,
+          "action_counts": {
+            "A0_basic_top5": 164,
+            "A1_wide_rerank": 159,
+            "A2_rewrite_rerank": 177
+          },
+          "completed_steps": 500,
+          "resumed": false
+        }
+      ]
+    },
+    "rule": {
+      "seed_count": 5,
+      "reward_mean": 1.1674503079489091,
+      "reward_std_across_seeds": 0.0018784669353712237,
+      "seeds": [
+        2026100301,
+        2026100302,
+        2026100303,
+        2026100304,
+        2026100305
+      ],
+      "runs": [
+        {
+          "policy": "rule",
+          "seed": 2026100301,
+          "steps": 500,
+          "reward_mean": 1.163854052222184,
+          "reward_std": 0.0671279364407165,
+          "action_counts": {
+            "A0_basic_top5": 174,
+            "A1_wide_rerank": 167,
+            "A2_rewrite_rerank": 159
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "rule",
+          "seed": 2026100302,
+          "steps": 500,
+          "reward_mean": 1.1680742429225788,
+          "reward_std": 0.07116264759762611,
+          "action_counts": {
+            "A0_basic_top5": 153,
+            "A1_wide_rerank": 177,
+            "A2_rewrite_rerank": 170
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "rule",
+          "seed": 2026100303,
+          "steps": 500,
+          "reward_mean": 1.1687139488943243,
+          "reward_std": 0.06896433888722735,
+          "action_counts": {
+            "A0_basic_top5": 160,
+            "A1_wide_rerank": 161,
+            "A2_rewrite_rerank": 179
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "rule",
+          "seed": 2026100304,
+          "steps": 500,
+          "reward_mean": 1.167509582367503,
+          "reward_std": 0.0700913306161583,
+          "action_counts": {
+            "A0_basic_top5": 159,
+            "A1_wide_rerank": 167,
+            "A2_rewrite_rerank": 174
+          },
+          "completed_steps": 500,
+          "resumed": false
+        },
+        {
+          "policy": "rule",
+          "seed": 2026100305,
+          "steps": 500,
+          "reward_mean": 1.1690997133379553,
+          "reward_std": 0.06548792461612353,
+          "action_counts": {
+            "A0_basic_top5": 149,
+            "A1_wide_rerank": 185,
+            "A2_rewrite_rerank": 166
+          },
+          "completed_steps": 500,
+          "resumed": false
+        }
+      ]
+    }
+  },
+  "deployment": {
+    "selected_policy": "rule",
+    "rule_reward_mean": 1.1674503079489091,
+    "linucb_reward_mean": 0.941825473473784,
+    "margin": 0.0,
+    "rollback_required": true,
+    "reason": "linucb_not_better_than_rule"
+  }
+}

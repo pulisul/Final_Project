@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "active_policy": "rule",
+  "rollback_applied": true,
+  "source": "evidence/week7/policy_comparison.json",
+  "reason": "linucb_not_better_than_rule",
+  "linucb_reward_mean": 0.941825473473784,
+  "rule_reward_mean": 1.1674503079489091
+}

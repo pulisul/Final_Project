@@ -1,0 +1,15 @@
+{"case_id": "q01", "question": "RAG는 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q02", "question": "RAG는 질문을 받은 뒤 어떤 순서로 처리하나요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q03", "question": "RAG에서 검색된 근거는 어디에 사용되나요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q04", "question": "이 프로젝트의 핵심 게이트가 요구하는 것은 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q05", "question": "검색 결과와 출처는 어떤 관계여야 하나요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q06", "question": "사과는 무엇인가요?", "relevant_doc_ids": ["c580497da026f365"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q07", "question": "사과 문서는 어떤 테스트 목적에 사용되나요?", "relevant_doc_ids": ["c580497da026f365"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q08", "question": "사과에 여러 품종이 있나요?", "relevant_doc_ids": ["c580497da026f365"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q09", "question": "샘플 문서에서 과일로 언급된 것은 무엇인가요?", "relevant_doc_ids": ["c580497da026f365"], "should_fallback": false, "question_type": "fact"}
+{"case_id": "q10", "question": "RAG 문서와 사과 문서는 각각 어떤 용도의 샘플인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325", "c580497da026f365"], "should_fallback": false, "question_type": "multi_doc"}
+{"case_id": "q11", "question": "RAG와 사과 샘플 문서가 공통으로 검증하려는 것은 무엇인가요?", "relevant_doc_ids": ["dc7d4cb4e08c8325", "c580497da026f365"], "should_fallback": false, "question_type": "multi_doc"}
+{"case_id": "q12", "question": "화성 기지의 건설 예산은 얼마인가요?", "relevant_doc_ids": [], "should_fallback": true, "question_type": "fallback"}
+{"case_id": "q13", "question": "2028년 서울의 정확한 인구는 얼마인가요?", "relevant_doc_ids": [], "should_fallback": true, "question_type": "fallback"}
+{"case_id": "q14", "question": "양자컴퓨터의 현재 시장 점유율을 알려주세요.", "relevant_doc_ids": [], "should_fallback": true, "question_type": "fallback"}
+{"case_id": "q15", "question": "이 문서에 없는 특정 회사의 최신 매출을 알려주세요.", "relevant_doc_ids": [], "should_fallback": true, "question_type": "fallback"}

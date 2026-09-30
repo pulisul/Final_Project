@@ -1,0 +1,3 @@
+{"case_id": "q1", "question": "사과는 무엇인가요?", "relevant_doc_ids": ["c580497da026f365"], "should_fallback": false}
+{"case_id": "q2", "question": "검색 증강 생성 RAG는 문서를 어떻게 검색하고 근거를 생성하나요?", "relevant_doc_ids": ["dc7d4cb4e08c8325"], "should_fallback": false}
+{"case_id": "q3", "question": "화성기지 건설예산 금액은?", "relevant_doc_ids": [], "should_fallback": true}
