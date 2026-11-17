@@ -9,6 +9,9 @@ langgraph>=1.0,<2.0
 langchain-ollama>=1.0,<2.0
 ollama>=0.6,<1.0
 ragas>=0.4,<0.5
+# ragas 0.4.x 는 langchain_community.chat_models.vertexai 를 불러오는데, langchain-community 0.4.2 에서 이 모듈이 사라져
+# 새로 설치하면 `import ragas` 가 실패한다(2026-11 확인). 0.4.1 까지 고정한다.
+langchain-community>=0.4,<0.4.2
 openai>=1.0,<3.0  # RAGAS local Ollama uses OpenAI-compatible localhost client
 datasets>=4.0,<5.0
 numpy>=2.0,<3.0
@@ -20,3 +23,6 @@ python-dotenv>=1.1,<2.0
 
 # Web fallback when the RAG corpus is empty.
 ddgs>=9.16,<10.0
+
+# .hwp(5.x) 읽기 (doc_parsers). docx/xlsx/pptx/hwpx 는 표준 라이브러리만 사용.
+olefile>=0.47,<1.0

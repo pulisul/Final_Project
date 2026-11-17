@@ -10,6 +10,7 @@ except ImportError as e:  # clearer error than a stack trace during strict smoke
     raise SystemExit("streamlit is not installed. Install requirements.txt first.") from e
 
 from intellectagent.config import CoreConfig
+from intellectagent.corpus_scan import RootRejected
 from intellectagent.document_ingest import (
     UploadValidationError,
     index_runtime_documents,
@@ -17,6 +18,15 @@ from intellectagent.document_ingest import (
     save_upload_bytes,
 )
 from intellectagent.factory import build_components
+from intellectagent.folder_ui import (
+    add_root,
+    apply_roots,
+    check_root,
+    load_roots,
+    registered_documents,
+    scan_folder,
+    suggest_folders,
+)
 from intellectagent.generation import OllamaGenerator
 from intellectagent.answer_fallback_chain import EmptyRAGFallbackChain
 from intellectagent.ollama_knowledge import OllamaKnowledgeEngine
@@ -27,6 +37,7 @@ from intellectagent.ui_support import (
     build_cache_fingerprint,
     inspect_runtime_health,
     load_policy_info,
+    stable_json_hash,
 )
 
 ROOT = Path(__file__).resolve().parent
@@ -53,18 +64,121 @@ except Exception as exc:
     st.exception(exc)
     st.stop()
 
+# 화면에서 등록한 폴더(index/ui_roots.json)를 설정에 합친다. 저장된 폴더는 실행 때마다 다시 검증된다.
+ui_roots, ui_root_notes = load_roots(cfg_preview)
+cfg_preview = apply_roots(cfg_preview, ui_roots)
+
 INDEX_MARKER = cfg_preview.evidence_dir / "index_checkpoint.json"
 policy = load_policy_info(POLICY)
-cache_key = build_cache_fingerprint(config_path=CONFIG, policy_path=POLICY, index_marker=INDEX_MARKER)
+cache_key = stable_json_hash([
+    build_cache_fingerprint(config_path=CONFIG, policy_path=POLICY, index_marker=INDEX_MARKER),
+    [str(r) for r in ui_roots],
+])[:20]
 
 
 @st.cache_resource
 def load_runtime(_cache_key: str):
     cfg = CoreConfig.load(CONFIG)
+    cfg = apply_roots(cfg, load_roots(cfg)[0])
     return cfg, build_components(cfg, runtime_profile=os.environ.get("RUNTIME_PROFILE"))
 
 
+@st.cache_data(ttl=300, show_spinner=False)
+def cached_documents(key: str) -> list[str]:
+    """색인 대상 파일 목록(문자열). 폴더가 크면 매 클릭마다 훑지 않도록 캐시하고, 색인·등록 때 비운다."""
+    return [str(p) for p in (registered_documents(cfg_preview) if ui_roots else list_ingestible_documents(cfg_preview.allowed_root, cfg_preview.allowed_extensions))]
+
+
+def _pick_folder(path: str) -> None:
+    st.session_state["folder_input"] = path
+    st.session_state["folder_scan"] = None
+
+
+def _shown(path: str) -> str:
+    p = Path(path)
+    for base in (cfg_preview.allowed_root, *ui_roots):
+        try:
+            return str(p.relative_to(base))
+        except ValueError:
+            continue
+    return path
+
+
 with st.sidebar:
+    st.subheader("📂 폴더에서 문서 찾기")
+    st.caption("내 컴퓨터의 폴더를 지정하면 하위 폴더까지 훑어 문서를 찾습니다. 먼저 '찾아보기'로 개수만 확인하고, 맞으면 등록·색인합니다.")
+    for note in ui_root_notes:
+        st.warning(note)
+    if st.button("문서가 많은 폴더 추천", use_container_width=True):
+        st.session_state["folder_candidates"] = suggest_folders(cfg_preview)
+    for cand in st.session_state.get("folder_candidates") or []:
+        st.button(f"{cand['path']} · {cand['supported_files']}개{'+' if cand['truncated'] else ''}", key=f"cand_{cand['path']}",
+                  on_click=_pick_folder, args=(cand["path"],), use_container_width=True)
+    if st.session_state.get("folder_candidates") == []:
+        st.caption("추천할 폴더가 없습니다. 경로를 직접 입력하세요.")
+    folder_text = st.text_input("폴더 경로", key="folder_input", placeholder="예: ~/Documents/규정집")
+    if st.button("찾아보기 (색인 안 함)", disabled=not folder_text.strip(), use_container_width=True):
+        try:
+            with st.spinner("폴더를 훑는 중..."):
+                st.session_state["folder_scan"] = scan_folder(cfg_preview, check_root(cfg_preview, folder_text))
+        except RootRejected as exc:
+            st.session_state["folder_scan"] = None
+            st.error(str(exc))
+        except Exception as exc:  # noqa: BLE001 - 권한 오류 등은 화면에 그대로 보여 준다
+            st.session_state["folder_scan"] = None
+            st.error(f"폴더를 읽지 못했습니다: {type(exc).__name__}: {exc}")
+    scan = st.session_state.get("folder_scan")
+    if scan is not None:
+        st.markdown(f"**{scan.root}**")
+        c1, c2 = st.columns(2)
+        c1.metric("색인 대상", f"{scan.unique_files}개")
+        c2.metric("용량", f"{scan.total_mb} MB")
+        if scan.by_ext:
+            st.caption("형식별: " + ", ".join(f"{k} {v}" for k, v in scan.by_ext.items()))
+        if scan.duplicates:
+            st.caption(f"내용이 같은 파일 {scan.duplicates}개는 한 번만 색인합니다.")
+        if scan.truncated:
+            st.warning("파일이 너무 많아 일부만 훑었습니다. 더 좁은 폴더를 지정하세요.")
+        if scan.skipped:
+            with st.expander("제외된 파일 사유"):
+                for reason, n in scan.skipped.items():
+                    st.write(f"• {reason}: {n}개")
+                    for ex in scan.examples.get(reason, [])[:2]:
+                        st.caption(ex)
+        if scan.samples:
+            with st.expander("색인 대상 예시"):
+                for s in scan.samples:
+                    st.write("•", s)
+        if scan.unique_files == 0:
+            st.info("색인할 문서가 없습니다. 지원 형식: " + ", ".join(cfg_preview.allowed_extensions))
+        elif st.button("이 폴더 등록 + 색인", type="primary", use_container_width=True):
+            try:
+                add_root(cfg_preview, str(scan.root))
+                new_cfg = apply_roots(CoreConfig.load(CONFIG), load_roots(cfg_preview)[0])
+                _cfg0, comps = load_runtime(cache_key)
+                with st.spinner(f"{scan.unique_files}개 문서를 색인하는 중... (처음에는 오래 걸릴 수 있습니다)"):
+                    state = index_runtime_documents(cfg=new_cfg, embedder=comps[0], store=comps[1])
+                failed_index = state.get("failed", {})
+                st.session_state["ingest_notice"] = {
+                    "kind": "folder", "saved": scan.unique_files, "duplicates": scan.duplicates,
+                    "indexed": len(state.get("completed", {})), "index_failed": len(failed_index),
+                    "failures": [f"{Path(k).name}: {v}" for k, v in failed_index.items()],
+                }
+                st.session_state["folder_scan"] = None
+                load_runtime.clear()
+                cached_documents.clear()
+                st.session_state.last_payload = None
+                st.rerun()
+            except Exception as exc:  # noqa: BLE001
+                st.error("등록 또는 색인에 실패했습니다.")
+                st.exception(exc)
+    if ui_roots:
+        with st.expander(f"등록된 폴더 {len(ui_roots)}개"):
+            for r in ui_roots:
+                st.write("•", str(r))
+            st.caption("등록 해제는 아직 지원하지 않습니다. 이미 색인된 내용을 지우는 기능이 없어, 해제해도 옛 조각이 검색될 수 있기 때문입니다.")
+
+    st.divider()
     st.subheader("📁 문서 관리")
     st.caption(f"저장 위치: {cfg_preview.allowed_root.relative_to(ROOT) if ROOT in cfg_preview.allowed_root.parents else cfg_preview.allowed_root}")
     uploaded_files = st.file_uploader(
@@ -123,19 +237,20 @@ with st.sidebar:
 
     notice = st.session_state.pop("ingest_notice", None)
     if notice:
+        what = "폴더 문서" if notice.get("kind") == "folder" else "업로드"
         if notice["index_failed"] == 0 and not notice["failures"]:
-            st.success(f"업로드 {notice['saved']}개 · 인덱싱 완료 {notice['indexed']}개")
+            st.success(f"{what} {notice['saved']}개 · 전체 인덱싱 완료 {notice['indexed']}개")
         else:
-            st.warning(f"업로드 {notice['saved']}개 · 인덱싱 완료 {notice['indexed']}개 · 확인 필요 {len(notice['failures'])}개")
+            st.warning(f"{what} {notice['saved']}개 · 전체 인덱싱 완료 {notice['indexed']}개 · 확인 필요 {len(notice['failures'])}개")
             for msg in notice["failures"][:10]:
                 st.caption(msg)
 
-    docs = list_ingestible_documents(cfg_preview.allowed_root, cfg_preview.allowed_extensions)
+    docs = cached_documents(cache_key)
     st.caption(f"현재 등록 문서: {len(docs)}개")
     if docs:
         with st.expander("등록 문서 보기"):
             for p in docs[:30]:
-                st.write("•", p.relative_to(cfg_preview.allowed_root))
+                st.write("•", _shown(p))
             if len(docs) > 30:
                 st.caption(f"외 {len(docs) - 30}개")
 
@@ -149,7 +264,15 @@ with st.sidebar:
     if policy.rollback_applied:
         st.warning(f"RL 정책 롤백 적용: {policy.reason}")
 
-docs_now = list_ingestible_documents(cfg_preview.allowed_root, cfg_preview.allowed_extensions)
+with st.sidebar:
+    with st.expander("오픈소스 고지"):
+        _notice = Path(__file__).resolve().parent / "THIRD_PARTY_NOTICES.md"
+        try:
+            st.markdown(_notice.read_text(encoding="utf-8"))
+        except OSError:
+            st.caption("THIRD_PARTY_NOTICES.md 를 찾지 못했습니다. 저장소 루트의 같은 이름 파일을 참고하세요.")
+
+docs_now = cached_documents(cache_key)
 web_settings = settings_from_feature_flags(cfg_preview.feature_flags)
 rag = None
 empty_rag_chain = None
@@ -162,6 +285,23 @@ if docs_now:
         st.error("모델 또는 DB 로딩에 실패했습니다. Core 설정과 인덱스 상태를 확인하세요.")
         st.exception(exc)
         st.stop()
+    if hasattr(_store, "rows") and not _store.rows:
+        # 메모리 저장소(use_chroma=false)는 앱을 켤 때마다·런타임을 다시 만들 때마다 비어 있다. 문서가 있으면 한 번 자동으로 다시 색인한다.
+        if st.session_state.get("auto_reindexed") != cache_key:
+            st.session_state["auto_reindexed"] = cache_key
+            with st.spinner("메모리 저장소를 다시 채우는 중..."):
+                try:
+                    index_runtime_documents(cfg=cfg, embedder=_embedder, store=_store)
+                except Exception as exc:  # noqa: BLE001
+                    st.error(f"자동 재색인에 실패했습니다: {type(exc).__name__}: {exc}")
+        # 저장소를 제자리에서 채웠으므로 다시 그릴 필요가 없다(rerun 하면 방금 띄운 완료 알림이 사라진다).
+    if hasattr(_store, "rows") and not _store.rows:
+        st.warning("색인이 비어 있습니다. 현재 설정은 메모리 저장소라 앱을 다시 켜면 사라집니다. "
+                   "디스크에 저장하려면 운영 설정(config/core.production.json, Chroma)을 쓰세요.")
+        if st.button("지금 다시 색인", type="primary"):
+            with st.spinner("문서를 색인하는 중..."):
+                index_runtime_documents(cfg=cfg, embedder=_embedder, store=_store)
+            st.rerun()
 else:
     st.info(
         "RAG 문서가 없습니다. 답변 순서는 ① 인터넷 검색 근거 → "
@@ -229,6 +369,7 @@ def render_payload(payload: dict, message_index: int) -> None:
 
             source_label = (
                 str(src.get("title") or "").strip()
+                or str(src.get("source_name") or "").strip()
                 or str(src.get("doc_id") or "").strip()
                 or "출처 정보"
             )

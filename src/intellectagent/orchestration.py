@@ -3,8 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from .gating import gate_score
 from .grounding import GroundingResult, validate_grounding
 from .models import Answer, SearchHit
+from .textnorm import clean_text
 
 FALLBACK_NO_EVIDENCE = "관련 근거 문서를 찾지 못했습니다. 질문을 더 구체적으로 바꿔 주세요."
 FALLBACK_UNGROUNDED = "근거 검증을 통과하지 못해 답변을 제공하지 않습니다. 질문을 더 구체적으로 바꿔 주세요."
@@ -19,6 +21,9 @@ class WorkflowState:
     route: str = "start"
     answer: Answer | None = None
     trace: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        self.question = clean_text(self.question)   # CoreRAG 와 같은 질문 정리
 
 
 class AgenticRAGWorkflow:
@@ -43,7 +48,7 @@ class AgenticRAGWorkflow:
     def route_after_retrieve(self, state: WorkflowState) -> str:
         if not state.hits:
             state.route = "fallback_no_evidence"
-        elif state.hits[0].score < self.fallback_min_score:
+        elif gate_score(state.hits) < self.fallback_min_score:
             state.route = "fallback_no_evidence"
         else:
             state.route = "generate"
@@ -79,7 +84,8 @@ class AgenticRAGWorkflow:
 
     def fallback_node(self, state: WorkflowState, reason: str) -> WorkflowState:
         state.trace.append(reason)
-        text = FALLBACK_UNGROUNDED if reason == "fallback_ungrounded" else FALLBACK_NO_EVIDENCE
+        refused = bool(state.grounding and state.grounding.model_refused)   # 모델의 '근거 없음' 답은 CoreRAG 처럼 no_evidence 문구
+        text = FALLBACK_UNGROUNDED if reason == "fallback_ungrounded" and not refused else FALLBACK_NO_EVIDENCE
         state.answer = Answer(state.question, text, (), tuple(state.hits), True)
         return state
 

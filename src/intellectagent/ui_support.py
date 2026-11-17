@@ -167,6 +167,7 @@ def answer_to_ui_payload(answer, policy: PolicyInfo) -> dict[str, Any]:
                 "text": h.text,
                 "source_type": str(h.metadata.get("source_type", "rag")),
                 "title": str(h.metadata.get("title", "")),
+                "source_name": str(h.metadata.get("source", "")),
                 "url": str(h.metadata.get("url", "")),
                 "provider": str(h.metadata.get("provider", "")),
                 "model": str(h.metadata.get("model", "")),

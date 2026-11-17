@@ -124,9 +124,33 @@ def list_ingestible_documents(allowed_root: Path, allowed_extensions: Iterable[s
     )
 
 
+def make_loader(cfg):
+    """설정에 맞는 문서 로더. ``feature_flags.use_parse_cache`` 가 켜져 있으면 파싱 결과를 캐시하는 로더로 감싼다(기본 꺼짐)."""
+    flags = cfg.feature_flags or {}
+    cache_dir = (Path(cfg.index_dir).parent / "parse_cache").resolve()
+    extra = [Path(r).expanduser() for r in flags.get("search_roots", [])]
+    if extra:   # 여러 폴더 색인(명시한 폴더만). 색인·증거·캐시 폴더는 스캔에서 제외한다.
+        from .corpus_scan import MultiRootLoader
+
+        loader = MultiRootLoader([cfg.allowed_root, *extra], cfg.allowed_extensions, cfg.max_file_bytes,
+                                 exclude_exact_duplicates=bool(flags.get("exclude_exact_duplicates", True)),
+                                 allow_home=bool(flags.get("allow_home_root", False)),
+                                 exclude_paths=[cfg.index_dir, cfg.evidence_dir, cache_dir])
+    else:
+        loader = SafeDocumentLoader(cfg.allowed_root, cfg.allowed_extensions, cfg.max_file_bytes)
+    if not flags.get("use_parse_cache", False):
+        return loader
+    from .parse_cache import CachingDocumentLoader, ParseCache
+
+    for root in [Path(cfg.allowed_root).resolve(), *[Path(r).expanduser().resolve() for r in extra]]:
+        if cache_dir == root or root in cache_dir.parents:
+            raise ValueError(f"parse cache must be outside the document roots: {cache_dir}")
+    return CachingDocumentLoader(loader, ParseCache(cache_dir))
+
+
 def index_runtime_documents(*, cfg, embedder, store) -> dict:
     """Index cfg.allowed_root into the already-loaded runtime vector store."""
-    loader = SafeDocumentLoader(cfg.allowed_root, cfg.allowed_extensions, cfg.max_file_bytes)
+    loader = make_loader(cfg)
     db = MetadataDB(cfg.metadata_db)
     checkpoint = cfg.evidence_dir / "index_checkpoint.json"
     state = Indexer(loader, embedder, store, db, cfg).index_all(checkpoint)

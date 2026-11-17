@@ -17,11 +17,15 @@ def main():
     ev=sub.add_parser("evaluate"); ev.add_argument("--cases",default="data/eval/eval.jsonl")
     sub.add_parser("manifest")
     a=ap.parse_args(); cfg=CoreConfig.load(Path(a.config)); emb,store,retr,gen,pipe=build_components(cfg)
-    loader=SafeDocumentLoader(cfg.allowed_root,cfg.allowed_extensions,cfg.max_file_bytes); db=MetadataDB(cfg.metadata_db)
+    from .document_ingest import make_loader
+    loader=make_loader(cfg); db=MetadataDB(cfg.metadata_db)
     # In-memory smoke mode must index in the same process before ask/evaluate.
     if not cfg.feature_flags.get("use_chroma") and a.cmd in {"ask","evaluate"}:
         Indexer(loader,emb,store,db,cfg).index_all(cfg.evidence_dir/"index_checkpoint.json")
-    if a.cmd=="index": print(json.dumps(Indexer(loader,emb,store,db,cfg).index_all(cfg.evidence_dir/"index_checkpoint.json"),ensure_ascii=False,indent=2))
+    if a.cmd=="index":
+        st=Indexer(loader,emb,store,db,cfg).index_all(cfg.evidence_dir/"index_checkpoint.json")
+        if hasattr(retr,"warm"): st["m3_chunks_encoded"]=retr.warm()   # bge_m3: 첫 질문이 느려지지 않게 미리 인코딩
+        print(json.dumps(st,ensure_ascii=False,indent=2))
     elif a.cmd=="ask": print(pipe.ask(a.question))
     elif a.cmd=="evaluate": print(json.dumps(evaluate_core(pipe,load_cases(cfg.project_root/a.cases)),ensure_ascii=False,indent=2))
     elif a.cmd=="manifest":

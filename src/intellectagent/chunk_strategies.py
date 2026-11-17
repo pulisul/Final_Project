@@ -11,9 +11,19 @@ class ChunkStrategyConfig:
     overlap: int = 80
     min_chars: int = 120
     max_chars: int = 1200
+    context_header: bool = False   # True 면 색인용 문맥 머리말을 단다(chunk.text 는 그대로)
 
 
 def chunk_with_strategy(doc: Document, cfg: ChunkStrategyConfig) -> list[Chunk]:
+    chunks = _chunk_with_strategy(doc, cfg)
+    if cfg.context_header:
+        from .context_headers import add_context_headers
+
+        chunks = add_context_headers(doc, chunks)
+    return chunks
+
+
+def _chunk_with_strategy(doc: Document, cfg: ChunkStrategyConfig) -> list[Chunk]:
     """Create deterministic chunks using one named strategy.
 
     Supported strategies:

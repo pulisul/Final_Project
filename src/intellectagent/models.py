@@ -43,3 +43,9 @@ class EvalCase:
     question: str
     relevant_doc_ids: tuple[str, ...]
     should_fallback: bool = False
+
+
+def index_text(chunk: "Chunk") -> str:
+    """색인(임베딩·BM25)에 넣는 글. 문맥 머리말(``metadata["context"]``)이 있으면 본문 앞에 붙인다. 화면·근거·평가에는 항상 원래 ``chunk.text`` 를 쓴다."""
+    ctx = chunk.metadata.get("context") if chunk.metadata else None
+    return f"{ctx}\n{chunk.text}" if ctx else chunk.text

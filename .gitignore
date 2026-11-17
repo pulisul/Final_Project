@@ -52,3 +52,9 @@ data/real_docs/*
 # Local model/cache directories
 .cache/
 .huggingface/
+
+# 설치·실행 산출물
+install.log
+install_report.json
+evidence/*
+!evidence/.gitkeep

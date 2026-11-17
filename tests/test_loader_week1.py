@@ -29,3 +29,15 @@ def test_case_insensitive_extension_allowed(tmp_path: Path):
     p = root / "A.TXT"; p.write_text("hello", encoding="utf-8")
     loader = SafeDocumentLoader(root, (".txt",), 1024)
     assert loader.load(p).text == "hello"
+
+
+def test_expect_txt_memo_is_not_part_of_corpus(tmp_path: Path):
+    """사람이 적은 '<문서>.expect.txt' 정답 메모가 말뭉치에 섞이면 질문 생성·평가가 오염된다."""
+    from intellectagent.corpus_scan import scan_roots
+    root = tmp_path / "root"; root.mkdir()
+    (root / "a.txt").write_text("본문", encoding="utf-8")
+    (root / "a.txt.expect.txt").write_text("정답 문장", encoding="utf-8")
+    loader = SafeDocumentLoader(root, (".txt",), 10_000)
+    assert [p.name for p in loader.discover()] == ["a.txt"]
+    scan = scan_roots([root], (".txt",), 10_000, allow_home=True)
+    assert [e.path.name for e in scan.entries] == ["a.txt"]

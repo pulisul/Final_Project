@@ -1,0 +1,14 @@
+IntellectAgent 설치 (압축을 푼 폴더에서)
+
+[macOS / Linux]  터미널을 열고 이 폴더로 이동한 뒤
+    bash install.sh        ← 처음 1회 (환경 설치. 모델 내려받기가 있어 시간이 걸립니다)
+    bash run.sh doctor     ← 환경 진단
+    bash run.sh app        ← 화면 실행 (브라우저: http://localhost:8501)
+
+[Windows]
+    install.bat 더블클릭   ← 처음 1회
+    run.bat doctor
+    run.bat app
+
+필요한 것: Python 3.11 (없으면 설치기가 방법을 알려 줍니다)
+자세한 설명: README.md   /   문제가 생기면 install.log 를 확인하세요.

@@ -8,7 +8,17 @@
   "allowed_extensions": [
     ".md",
     ".txt",
-    ".pdf"
+    ".pdf",
+    ".docx",
+    ".xlsx",
+    ".pptx",
+    ".hwpx",
+    ".hwp",
+    ".doc",
+    ".ppt",
+    ".odt",
+    ".ods",
+    ".odp", ".eml"
   ],
   "semantic_min_chars": 120,
   "semantic_max_chars": 1200,
