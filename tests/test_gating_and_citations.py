@@ -112,4 +112,4 @@ def test_factory_passes_citation_style_to_generator():
         seq = parts.values() if isinstance(parts, dict) else parts
         return next(v.generator for v in seq if hasattr(v, "generator") and isinstance(v.generator, OllamaGenerator))
     assert gen({"use_ollama": True, "citation_style": "index"}).citation_style == "index"
-    assert gen({"use_ollama": True}).citation_style == "id"                      # 기본값은 기존 동작
+    assert gen({"use_ollama": True}).citation_style == "index"  # 기본값은 번호 인용(index)

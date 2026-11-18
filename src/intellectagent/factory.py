@@ -29,7 +29,7 @@ def build_components(cfg, runtime_profile: str | None = None):
     store = ChromaVectorStore(str(cfg.index_dir), cfg.collection_name) if f.get("use_chroma") else InMemoryVectorStore()
     reranker = CrossEncoderReranker(cfg.reranker_model, device=device) if f.get("use_reranker") else NoopReranker()
     gen_opts = {k: f[n] for k, n in (("temperature", "ollama_temperature"), ("seed", "ollama_seed")) if f.get(n) is not None}
-    generator = OllamaGenerator(cfg.ollama_model, citation_style=f.get("citation_style","id"), options=gen_opts or None) if f.get("use_ollama") else ExtractiveGenerator()
+    generator = OllamaGenerator(cfg.ollama_model, citation_style=f.get("citation_style","index"), options=gen_opts or None) if f.get("use_ollama") else ExtractiveGenerator()
     mode = str(f.get("retrieval_mode", "vector"))
     if mode == "vector":
         retriever = Retriever(embedder, store, reranker)

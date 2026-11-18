@@ -34,6 +34,7 @@
     "use_sentence_transformer": true,
     "use_reranker": true,
     "use_ollama": true,
+    "citation_style": "index",
     "use_langgraph": true,
     "use_ragas": true,
     "use_rl": false,
